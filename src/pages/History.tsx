@@ -2,7 +2,7 @@
 import React from 'react';
 import { MainLayout } from '@/components/Layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { history } from 'lucide-react';
+import { History as HistoryIcon } from 'lucide-react';
 
 const historyItems = [
   {
@@ -40,7 +40,7 @@ const History = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <history className="h-5 w-5" />
+              <HistoryIcon className="h-5 w-5" />
               Historical Events
             </CardTitle>
           </CardHeader>

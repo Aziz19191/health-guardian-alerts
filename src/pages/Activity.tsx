@@ -2,7 +2,7 @@
 import React from 'react';
 import { MainLayout } from '@/components/Layout/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { activity } from 'lucide-react';
+import { Activity as ActivityIcon } from 'lucide-react';
 
 const activities = [
   {
@@ -37,7 +37,7 @@ const Activity = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <activity className="h-5 w-5" />
+              <ActivityIcon className="h-5 w-5" />
               Recent Activities
             </CardTitle>
           </CardHeader>
