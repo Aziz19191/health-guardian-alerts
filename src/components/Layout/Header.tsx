@@ -5,10 +5,45 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from 'react-router-dom';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+
+const navigationItems = [
+  { title: "Dashboard", path: "/" },
+  { title: "Metrics", path: "/metrics" },
+  { title: "Alerts", path: "/alerts" },
+  { title: "Activity", path: "/activity" },
+  { title: "History", path: "/history" },
+  { title: "Notifications", path: "/notifications" },
+  { title: "Settings", path: "/settings" },
+];
 
 export function Header() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    setOpen(false);
+  };
 
   const handleNotificationClick = () => {
     toast({
@@ -22,11 +57,17 @@ export function Header() {
     <header className="flex h-14 items-center gap-4 border-b bg-card px-6">
       <div className="flex flex-1 items-center gap-2">
         <Search className="h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search metrics, alerts..."
-          className="h-8 w-[300px] bg-background"
-        />
+        <Button
+          variant="outline"
+          className="h-8 w-[300px] justify-start text-sm text-muted-foreground"
+          onClick={() => setOpen(true)}
+        >
+          <Search className="mr-2 h-4 w-4" />
+          Search sections...
+          <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </Button>
       </div>
       <nav className="flex items-center gap-2">
         <Button 
@@ -45,6 +86,23 @@ export function Header() {
           Connect Backend
         </Button>
       </nav>
+
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Search all sections..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Sections">
+            {navigationItems.map((item) => (
+              <CommandItem
+                key={item.path}
+                onSelect={() => handleNavigate(item.path)}
+              >
+                {item.title}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </header>
   );
 }
